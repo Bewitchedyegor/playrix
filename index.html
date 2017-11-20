@@ -1,0 +1,147 @@
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Playrix - список сотрудников</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="js/vue.js"></script>
+  <script src="js/vuex.js"></script>
+  <script src="js/vue-router.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+  <header class="page-header">
+    <div class="branding">
+      <img src="img/logo.png" alt="Logo" title="Главная страница" class="logo"/>
+      <h1>- список сотрудников</h1>
+    </div>
+  </header>
+  <main id="app">
+    <router-view></router-view>
+  </main>
+</div>
+
+<template id="employee-list">
+  <div>
+    <div class="actions">
+      <router-link class="btn btn-default" v-bind:to="{path: '/add-employee'}">
+        + Добавить сотрудника
+      </router-link>
+    </div>
+    <div class="filters row">
+      <div class="form-group col-sm-3">
+        <label for="search-element">Поиск по фамилии</label>
+        <input v-model="searchKey" class="form-control" id="search-element" requred/>
+      </div>
+    </div>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Фамилия, имя</th>
+        <th>Дата рождения</th>
+        <th>Город</th>
+        <th>Работает</th>
+        <th class="col-sm-2">Действия</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="person in filteredEmployees">
+        <td>
+          {{ person.surname }} {{ person.name }}
+        </td>
+        <td>{{ person.birthdate }}</td>
+        <td>
+          {{ person.city }}
+        </td>
+        <td>
+          {{ person.type }}
+        </td>
+        <td>
+          <router-link class="btn btn-warning btn-xs" v-bind:to="{name: 'employee-edit', params: {employee_id: person.id}}">Изменить</router-link>
+          <router-link class="btn btn-danger btn-xs" v-bind:to="{name: 'employee-delete', params: {employee_id: person.id}}">Удалить</router-link>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<template id="add-employee">
+  <div>
+    <h2>Добавить сотрудника</h2>
+    <form v-on:submit="createEmployee">
+      <div class="form-group">
+        <label for="add-surname">Фамилия</label>
+        <input class="form-control" id="add-surname" v-model="person.surname" required/>
+      </div>
+      <div class="form-group">
+        <label for="add-name">Имя</label>
+        <input class="form-control" id="add-name" v-model="person.name" required/>
+      </div>
+      <div class="form-group">
+        <label for="add-birthdate">Дата рождения</label>
+        <input class="form-control" id="add-birthdate" v-model="person.birthdate" required/>
+      </div>
+      <div class="form-group">
+        <label for="add-city">Город</label>
+        <input class="form-control" id="add-city" v-model="person.city"/>
+      </div>
+      <div class="form-group">
+        <label for="add-type">Работает</label>
+        <input class="form-control" id="add-type" v-model="person.type"/>
+      </div>
+      <button type="submit" class="btn btn-primary">Добавить</button>
+      <router-link class="btn btn-default" v-bind:to="'/'">Отмена</router-link>
+    </form>
+  </div>
+</template>
+
+<template id="employee-edit">
+  <div>
+    <h2>Редактировать сотрудника</h2>
+    <form v-on:submit="updateEmployee">
+      <div class="form-group">
+        <label for="edit-surname">Фамилия</label>
+        <input class="form-control" id="edit-surname" v-model="person.surname" required/>
+      </div>      
+      <div class="form-group">
+        <label for="edit-name">Имя</label>
+        <input class="form-control" id="edit-name" v-model="person.name" required/>
+      </div>
+      <div class="form-group">
+        <label for="edit-birthdate">Дата рождения</label>
+        <input class="form-control" id="edit-birthdate" v-model="person.birthdate" required/>
+      </div>
+      <div class="form-group">
+        <label for="edit-city">Город</label>
+        <input class="form-control" id="edit-city" v-model="person.city" required/>
+      </div>
+      <div class="form-group">
+        <label for="edit-type">Работает</label>
+        <input class="form-control" id="edit-type" v-model="person.type" required/>
+      </div>
+      <button type="submit" class="btn btn-primary">Сохранить</button>
+      <router-link class="btn btn-default" v-bind:to="'/'">Отмена</router-link>
+    </form>
+  </div>
+</template>
+
+<template id="employee-delete">
+  <div>
+    <h2>Удалить сотрудника {{ person.surname }}</h2>
+    <form v-on:submit="deleteEmployee">
+      <p>Это действие нельзя будет изменить.</p>
+      <button type="submit" class="btn btn-danger">Удалить</button>
+      <router-link class="btn btn-default" v-bind:to="'/'">Отмена</router-link>
+    </form>
+  </div>
+</template>
+
+<script src="js/main.js"></script>
+</body>
+</html>
